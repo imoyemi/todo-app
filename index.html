@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo app</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap"
+      rel="stylesheet" />
+  </head>
+  <body>
+      <div class="content flex">
+        <div class="head flex">
+          <h2>TODO</h2>
+          <img src="./img/icon-moon.svg" alt="iconofmoon">
+        </div>
+        <form class="input-container">
+          <input type="text" class="input-txt" 
+          placeholder="Create a new todo...">
+          <div class="circle"></div>
+        </form>
+      </div>
+      <main class="flex">
+        <div class="list-container">
+           <ul></ul>
+          <div class="track-item flex">
+            <p><span class="count">0</span> items left</p>
+            <div class="item-btn">
+              <button class="all active-cl">All</button>
+              <button class="active">Active</button>
+              <button class="complete">Completed</button>
+            </div>
+            <button class="clear">
+              Clear Completed
+            </button>
+          </div>
+          <div class="item-btn-mobile">
+            <button class="all active-cl">All</button>
+            <button class="active">Active</button>
+            <button class="complete">Completed</button>
+          </div>
+        </div>
+      </main>
+    <script src="script.js"></script>
+  </body>
+</html>
