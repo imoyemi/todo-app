@@ -281,6 +281,13 @@ ul{
         width: 820px;
     }
 }
+
+@media screen and (max-height:570px){
+    .content{
+        height:  calc(40vh + 100px);
+    }
+
+}
 /* utility style */
 .flex{
     display: flex;
