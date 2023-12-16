@@ -6,6 +6,11 @@ const listContainer = document.querySelector(".list-container");
 const itemContainer = document.querySelector("ul");
 const itemCounter = document.querySelector(".count");
 const clearCompletebtn = document.querySelector(".clear")
+const itemBtns = document.querySelectorAll(".item-btn button")
+const darkModeBtn = document.querySelector(".head img")
+const headContent = document.querySelector(".content");
+const body =  document.body
+
 // add item to dom
 
 const onSubmit = (e) => {
@@ -18,6 +23,7 @@ const onSubmit = (e) => {
     inputValue.value = "";
     addItemsToLocal(value, input);
     addItemsDom(input);
+    activeItemLength()
   }
 };
 
@@ -38,6 +44,7 @@ function addItemsDom(item) {
   const checkedMark = document.createElement("img");
   const listtext = document.createElement("p");
   const buttondel = document.createElement("img");
+
 
   list.classList.add("list-item", "flex");
   divtxt.classList.add("list-txt", "flex");
@@ -74,6 +81,10 @@ function addItemsDom(item) {
 function displayitem() {
   const itemFormStorage = getItemsFromLocal();
   itemFormStorage.forEach((item) => addItemsDom(item.text));
+
+  addColor()
+  activeItemLength()
+  LsDarkMode()
 }
 
 //remove item from dom
@@ -82,6 +93,7 @@ function deleteitem(e) {
   if (e.target.parentElement.classList.contains("delete-btn")) {
     e.target.parentElement.parentElement.remove();
     removeItemsFromLocal(e.target.parentElement.parentElement.textContent);
+    activeItemLength()
   } else if (e.target.parentElement.classList.contains("list-checked")) {
     valueItemsFromLocal(e.target.parentElement.parentElement.textContent)
 
@@ -93,6 +105,7 @@ function deleteitem(e) {
       mark.style.display = "block"
       par.style.textDecoration = "line-through"
       par.style.color = "var(--Dark-Grayish-Blue)"
+      activeItemLength()
     }
   }
 
@@ -152,13 +165,125 @@ function removeFromLocal(){
 }
 
 function removecomplete(){
+  let itemFormStorage = getItemsFromLocal();
+  const text = document.querySelectorAll(".list-txt p");
+  itemFormStorage = itemFormStorage.filter(word => word.value === true)
+
+  text.forEach(item=>{
+    itemFormStorage.map(items =>{
+      if(item.textContent.includes(items.text)){
+        item.parentElement.parentElement.remove()
+      }
+    })
+
+  })
   removeFromLocal()
   
 }
+
+
+function addColor(){
+  let itemFormStorage = getItemsFromLocal();
+  const text = document.querySelectorAll(".list-txt p");
+  itemFormStorage = itemFormStorage.filter(word => word.value === true)
+
+  text.forEach(item=>{
+    itemFormStorage.map(items =>{
+      if(item.textContent.includes(items.text)){
+        const circle = item.parentElement.querySelector(".circled")
+        const mark = item.parentElement.querySelector(".checked-mark")
+        const par = item.parentElement.parentElement.querySelector("p")
+    
+        circle.style.backgroundImage = "linear-gradient( to right bottom,hsl(192, 100%, 67%),hsl(280, 87%, 65%))"
+        mark.style.display = "block"
+        par.classList.add("underline")
+      }
+    })
+  })
+}
+
+
+
+function displaybtns(e){
+  let itemFormStorage = getItemsFromLocal();
+  itemBtns.forEach(item=>{
+    item.classList.remove("active-cl")
+  })
+  e.currentTarget.classList.add("active-cl")
+
+  if(e.currentTarget.classList.contains("complete")){
+    itemContainer.innerHTML = ""
+    itemFormStorage
+    .filter(item => item.value === true)
+    .map(items =>{
+      addItemsDom(items.text)
+    } )
+    addColor()
+    itemCounter.textContent = 0
+  }
+  else if(e.currentTarget.classList.contains("active")){
+    itemContainer.innerHTML = ""
+    itemFormStorage
+    .filter(item => item.value === false)
+    .map(items =>{
+      addItemsDom(items.text)
+    } )
+    activeItemLength()
+  }
+
+  else{
+    itemContainer.innerHTML = ""
+    itemFormStorage.forEach(item=>addItemsDom(item.text))
+    addColor()
+    activeItemLength()
+  }
+  
+}
+
+function activeItemLength(){
+  let itemFormStorage = getItemsFromLocal();
+  itemFormStorage = itemFormStorage.filter(word => word.value === false)
+
+  itemCounter.textContent = itemFormStorage.length
+}
+
+function darkMode() {
+  body.classList.toggle("dark-theme")
+  
+  if(body.classList.contains("dark-theme")){
+    localStorage.setItem("isDarkMode",true)
+    
+  }
+
+  else{
+    localStorage.setItem("isDarkMode",false)
+  }
+  LsDarkMode()
+}
+
+function LsDarkMode(){
+  const itemFormStorageDm = localStorage.getItem("isDarkMode")
+
+  if(itemFormStorageDm === "true"){
+    darkModeBtn.src = "./img/icon-sun.svg"
+    headContent.classList.add("dark-content")
+    body.classList.add("dark-theme")
+  }
+  else{
+    darkModeBtn.src = "./img/icon-moon.svg"
+    headContent.classList.remove("dark-content")
+    body.classList.remove("dark-theme")
+  }
+
+  console.log(itemFormStorageDm)
+}
+
 // ** eventlistener
 itemContainer.addEventListener("click", deleteitem);
 form.addEventListener("submit", onSubmit);
 window.addEventListener("DOMContentLoaded", displayitem);
 clearCompletebtn.addEventListener("click",removecomplete)
+itemBtns.forEach(item=>item.addEventListener("click",displaybtns))
+darkModeBtn.addEventListener("click",darkMode)
 
-
+            
